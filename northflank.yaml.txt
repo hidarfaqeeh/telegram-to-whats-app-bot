@@ -1,0 +1,47 @@
+services:
+  telegram-whatsapp-bot:
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=production
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHANNEL_ID=${TELEGRAM_CHANNEL_ID}
+      - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+      - BOT_MIN_DELAY=${BOT_MIN_DELAY}
+      - BOT_MAX_DELAY=${BOT_MAX_DELAY}
+      - BOT_BETWEEN_GROUPS_DELAY=${BOT_BETWEEN_GROUPS_DELAY}
+      - BOT_MAX_MESSAGES_PER_HOUR=${BOT_MAX_MESSAGES_PER_HOUR}
+      - BLOCKED_WORDS=${BLOCKED_WORDS}
+    volumes:
+      - whatsapp_session:/app/whatsapp-session
+      - bot_logs:/app/logs
+      - bot_backups:/app/backups
+    healthcheck:
+      path: /api/health
+      port: 3000
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    resources:
+      cpu: 1
+      memory: 1Gi
+    scaling:
+      min: 1
+      max: 1
+
+volumes:
+  whatsapp_session:
+    size: 1Gi
+  bot_logs:
+    size: 1Gi
+  bot_backups:
+    size: 1Gi
