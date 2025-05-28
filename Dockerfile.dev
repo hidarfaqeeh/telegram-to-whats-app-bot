@@ -1,0 +1,39 @@
+# ملف Docker للتطوير
+FROM node:18-alpine
+
+# تثبيت المكتبات المطلوبة
+RUN apk add --no-cache \
+    chromium \
+    nss \
+    freetype \
+    freetype-dev \
+    harfbuzz \
+    ca-certificates \
+    ttf-freefont \
+    curl \
+    && rm -rf /var/cache/apk/*
+
+# إعداد Puppeteer
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
+WORKDIR /app
+
+# نسخ ملفات package
+COPY package*.json ./
+
+# تثبيت جميع المكتبات (بما في ذلك dev dependencies)
+RUN npm install
+
+# نسخ الكود
+COPY . .
+
+# كشف المنفذ
+EXPOSE 3000
+
+# متغيرات البيئة للتطوير
+ENV NODE_ENV=development
+ENV PORT=3000
+
+# تشغيل في وضع التطوير
+CMD ["npm", "run", "dev"]

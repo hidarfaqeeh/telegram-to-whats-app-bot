@@ -1,0 +1,52 @@
+{
+  "name": "telegram-whatsapp-bot-simple",
+  "version": "1.0.0",
+  "description": "بوت بسيط لإعادة توجيه الرسائل من تلقرام إلى واتساب بدون ذكاء اصطناعي",
+  "main": "server.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "setup": "node scripts/setup-simple.js",
+    "setup-db": "node scripts/setup-database.js",
+    "logs": "tail -f logs/bot.log",
+    "health": "curl http://localhost:3000/api/health",
+    "test": "npm run build && npm run start",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "node-telegram-bot-api": "^0.64.0",
+    "whatsapp-web.js": "^1.23.0",
+    "qrcode-terminal": "^0.12.0",
+    "puppeteer": "^21.0.0",
+    "pg": "^8.11.0",
+    "mongodb": "^6.0.0",
+    "ioredis": "^5.3.0",
+    "@radix-ui/react-progress": "^1.0.0",
+    "@radix-ui/react-checkbox": "^1.0.0",
+    "@radix-ui/react-scroll-area": "^1.0.0",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0",
+    "lucide-react": "^0.294.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/pg": "^8.10.0",
+    "typescript": "^5.0.0",
+    "tailwindcss": "^3.3.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
+  },
+  "keywords": ["telegram", "whatsapp", "bot", "automation", "forwarding", "simple"],
+  "author": "Your Name",
+  "license": "MIT"
+}

@@ -1,0 +1,49 @@
+# ملف Docker Compose للتطوير
+version: '3.8'
+
+services:
+  telegram-whatsapp-bot-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: telegram-whatsapp-bot-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_CHANNEL_ID=${TELEGRAM_CHANNEL_ID}
+      - ADMIN_CHAT_ID=${ADMIN_CHAT_ID}
+      - XAI_API_KEY=${XAI_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - whatsapp_session_dev:/app/whatsapp-session
+      - bot_logs_dev:/app/logs
+    networks:
+      - bot_network_dev
+
+  redis-dev:
+    image: redis:7-alpine
+    container_name: telegram-whatsapp-redis-dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data_dev:/data
+    networks:
+      - bot_network_dev
+
+volumes:
+  whatsapp_session_dev:
+  bot_logs_dev:
+  redis_data_dev:
+
+networks:
+  bot_network_dev:
+    driver: bridge

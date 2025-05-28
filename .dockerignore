@@ -1,0 +1,66 @@
+# ملفات Node.js
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ملفات Next.js
+.next
+out
+
+# ملفات البيئة
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ملفات IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# ملفات النظام
+.DS_Store
+Thumbs.db
+
+# ملفات Git
+.git
+.gitignore
+
+# ملفات Docker
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# ملفات التوثيق
+README.md
+docs/
+
+# ملفات الاختبار
+test/
+tests/
+*.test.js
+*.spec.js
+
+# ملفات البناء
+dist/
+build/
+
+# ملفات مؤقتة
+tmp/
+temp/
+
+# ملفات السجلات
+logs/
+*.log
+
+# ملفات النسخ الاحتياطي
+backups/
+
+# بيانات واتساب
+whatsapp-session/
+
+# ملفات SSL
+nginx/ssl/
