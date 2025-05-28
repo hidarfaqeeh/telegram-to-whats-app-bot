@@ -23,7 +23,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # تثبيت المكتبات
-RUN npm ci --only=production && npm cache clean --force
+RUN npm install --only=production && npm cache clean --force
 
 # نسخ الكود المصدري
 COPY . .
