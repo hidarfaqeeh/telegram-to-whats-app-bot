@@ -1,0 +1,15 @@
+services:
+  postgres:
+    type: postgres
+    version: 15
+    size: micro
+    storage: 10Gi
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
+    ports:
+      - 5432:5432
+    backups:
+      schedule: "0 0 * * *"  # كل يوم في الساعة 00:00
+      retention: 7  # الاحتفاظ بالنسخ الاحتياطية لمدة 7 أيام
