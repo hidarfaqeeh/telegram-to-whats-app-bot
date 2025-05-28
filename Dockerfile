@@ -1,5 +1,7 @@
-FROM node:18-alpine AS base
+# استخدام Node.js الرسمي كصورة أساسية
+FROM node:18-alpine
 
+# تثبيت المكتبات المطلوبة لـ Puppeteer
 RUN apk add --no-cache \
     chromium \
     nss \
@@ -8,35 +10,52 @@ RUN apk add --no-cache \
     harfbuzz \
     ca-certificates \
     ttf-freefont \
-    curl
+    python3 \
+    py3-pip \
+    postgresql-client \
+    && rm -rf /var/cache/apk/*
 
+# إعداد Puppeteer لاستخدام Chromium المثبت
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
-    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
+# إنشاء مجلد التطبيق
 WORKDIR /app
 
+# نسخ ملفات package
 COPY package*.json ./
 
-RUN npm install --omit=dev --legacy-peer-deps && npm cache clean --force
+# تثبيت المكتبات
+RUN npm install && npm cache clean --force
 
+# نسخ ملف requirements.txt وتثبيت المكتبات Python
+COPY requirements.txt ./
+RUN pip3 install --no-cache-dir -r requirements.txt
+
+# نسخ الكود المصدري
 COPY . .
 
+# بناء التطبيق
 RUN npm run build
 
-RUN addgroup -g 1001 -S nodejs \
-    && adduser -S nextjs -u 1001
+# إنشاء المجلدات المطلوبة
+RUN mkdir -p /app/whatsapp-session /app/logs /app/backups
 
-RUN mkdir -p /app/whatsapp-session /app/logs /app/backups \
-    && chown -R nextjs:nodejs /app
-
-USER nextjs
-
+# كشف المنفذ
 EXPOSE 3000
 
+# متغيرات البيئة
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# فحص صحة الحاوية
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:3000/api/health || exit 1
+    CMD wget -q -O - http://localhost:3000/api/health || exit 1
 
+# سكريبت بدء التشغيل
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# تشغيل التطبيق
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "start"]
