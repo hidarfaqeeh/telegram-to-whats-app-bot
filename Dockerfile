@@ -23,6 +23,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # تثبيت المكتبات
+RUN npm install --omit=dev --legacy-peer-deps && npm cache clean --force
 RUN npm install --only=production && npm cache clean --force
 
 # نسخ الكود المصدري
